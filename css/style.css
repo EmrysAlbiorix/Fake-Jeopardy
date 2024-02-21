@@ -1,24 +1,60 @@
 /* Add your style below */
 
+@font-face {
+    font-family: Korinna;
+    src: url(/fonts/ITC_Korinna_Regular.otf);
+}
 
+@font-face {
+    font-family: Gyparody;
+    src: url(/fonts/gyparody_rg.ttf);
+}
 
+#body {
+    background-color: #aaa;
+    font-family: Korinna;
+}
 
+#container {
+    width: 90%;
+}
 
+#gameInfo {
+    display:grid;
+    justify-content: center;
+}
 
+.header {
+    font-family: Gyparody;
+}
 
+.category {
+    background-color: blue;
+    text-color: #FFD700;
+    font-size: 20px;
+}
 
+.question {
+    background-color: blue;
+    text-color: #FFD700;
+    font-size: 20px;
+}
 
 
 /* initial style for gameboard - you'll want to delete this later   */
 /* it's just for getting started with js */
 
+#gameBoard {
+    display: grid;
+}
 
-#gameBoard div{
-  width: 150px;
-  height: 150px;
-  border-style: solid;
-  border-color: black;
-  border-width: 2px;
+#gameBoard > div{
+    display: grid;
+    width: 150px;
+    height: 150px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
 }
 
 

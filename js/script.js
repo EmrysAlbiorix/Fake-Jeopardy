@@ -7,10 +7,12 @@ document.getElementById("resetButton").addEventListener("click", resetGame)
 
 function start2stop() {
     document.getElementById("startButton").innerHTML = "Stop";
+    document.getElementById("feedback").innerHTML = "Choose a Category";
 }
 
 function stop2start() {
     document.getElementById("startButton").innerHTML = "Start";
+    document.getElementById("feedback").innerHTML = "Click Start to begin."
 }
 
 /* Highlights the button when mouseover
@@ -41,6 +43,7 @@ function startGame(){
 }
 
 function populateBoard(){
+    let cat=document.getElementsByClassName("category").innerHTML = "Test";
     document.getElementsByClassName("category").innerHTML = "Test";
 }
 
