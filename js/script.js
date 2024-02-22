@@ -2,35 +2,27 @@
 const categories=["Sports", "Animals", "Science & Nature", "History", "Art"]
 
 /* add event listeners for start & reset buttons here */
-document.getElementById("startButton").addEventListener("click", startGame)
-document.getElementById("resetButton").addEventListener("click", resetGame)
+document.getElementById("startButton").addEventListener("click", startGame);
+document.getElementById("resetButton").addEventListener("click", resetGame);
 
 function start2stop() {
-    document.getElementById("startButton").innerHTML = "Stop";
+    //document.getElementById("startButton").innerHTML = "Stop";
     document.getElementById("feedback").innerHTML = "Choose a Category";
+    //document.getElementById("startButton").id = "stopButton";
 }
 
 function stop2start() {
-    document.getElementById("startButton").innerHTML = "Start";
-    document.getElementById("feedback").innerHTML = "Click Start to begin."
+    //document.getElementById("startButton").innerHTML = "Start";
+    document.getElementById("feedback").innerHTML = "Click Start to begin.";
+    //document.getElementById("stopButton").id = "startButton";
 }
-
-/* Highlights the button when mouseover
-function myMouseoverHandler(event) {
-    event.target.style.backgroundColor = "white";
-}
-*/
-
-/* Stops highlight after mouse leaves
-function myMouseoutHandler(event) {
-    event.target.style.backgroundColor = "grey";
-}
-*/
 
 /* complete functions below */
 
 function startGame(){
-    start2stop();
+    // Starts the timer
+    startTimer();
+
     document.getElementById("startButton").disabled = true;
     document.getElementById("resetButton").disabled = false;
     populateBoard();
@@ -93,6 +85,8 @@ function checkResponse(){
 }
 
 function resetGame(){
+    resetTimer();
+    stopTimer();
     stop2start();
     document.getElementById("startButton").disabled = false;
     document.getElementById("resetButton").disabled = true;
@@ -100,4 +94,54 @@ function resetGame(){
 
 
 
+}
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+/* JS for the stopwatch */
+
+let hr = 0;
+let min = 0;
+let sec = 0;
+let count = 0;
+let timer;
+
+function startTimer() {
+    start2stop();
+    timer = setInterval(updateTimer, 10);
+    //document.getElementById("stopButton").addEventListener("click", stopTimer);
+}
+
+function stopTimer() {
+    clearInterval(timer);
+}
+
+function resetTimer() {
+    clearInterval(timer);
+    hr = min = sec = count = 0;
+    updateDisplay();
+}
+
+function updateTimer() {
+    count++;
+    if (count == 100) {
+        count = 0;
+        sec++;
+    }
+    if (sec == 60) {
+        sec = 0;
+        min++;
+    }
+    if (min == 60) {
+        min = 0;
+        hr++;
+    }
+    updateDisplay();
+}
+
+function updateDisplay() {
+    document.getElementById('hr').innerText = hr.toString().padStart(2, '0');
+    document.getElementById('min').innerText = min.toString().padStart(2, '0');
+    document.getElementById('sec').innerText = sec.toString().padStart(2, '0');
+    document.getElementById('count').innerText = count.toString().padStart(2, '0');
 }
