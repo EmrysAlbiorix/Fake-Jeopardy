@@ -1,57 +1,87 @@
 /* Add your style below */
 
 @font-face {
-    font-family: Korinna;
-    src: url(/fonts/ITC_Korinna_Regular.otf);
+    font-family: gyparody;
+    src: url(/fonts/gyparody_rg.ttf);
 }
 
 @font-face {
-    font-family: Gyparody;
-    src: url(/fonts/gyparody_rg.ttf);
+    font-family: korinna;
+    src: url(/fonts/ITC_Korinna_Regular.otf);
 }
 
 #body {
     background-color: #aaa;
-    font-family: Korinna;
+    font-family: korinna;
 }
 
 #container {
     width: 90%;
+    align-content: center;
+    margin: auto;
 }
 
 #gameInfo {
-    display:grid;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 18% 22% 35% 25%;
+    justify-content: space-evenly;
 }
 
-.header {
-    font-family: Gyparody;
+#score {
+    text-align: right;
+}
+
+#feedback {
+    text-align: left;
+}
+
+#time {
+    text-align: left;
+}
+
+header {
+    font-family: gyparody;
+    text-align: center;
+    color: black;
+}
+
+
+.question {
+    vertical-align: center;
+    horiz-align: center;
+    background-color: blue;
+    color: #FFD700;
+    font-size: 20px;
 }
 
 .category {
+    vertical-align: center;
+    horiz-align: center;
     background-color: blue;
-    text-color: #FFD700;
+    color: #FFD700;
     font-size: 20px;
+    text-transform: uppercase;
 }
 
-.question {
-    background-color: blue;
-    text-color: #FFD700;
-    font-size: 20px;
+#gameBoard {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-rows: 75px 75px 75px 75px 75px;
+    border-color: black;
+    border-style: solid;
+    border-width: 3px;
 }
+
 
 
 /* initial style for gameboard - you'll want to delete this later   */
 /* it's just for getting started with js */
 
-#gameBoard {
-    display: grid;
-}
 
 #gameBoard > div{
+    background-color: blue;
+    align-item: center;
     display: grid;
-    width: 150px;
-    height: 150px;
     border-style: solid;
     border-color: black;
     border-width: 2px;
