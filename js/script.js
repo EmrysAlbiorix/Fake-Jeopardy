@@ -94,7 +94,8 @@ function resetGame(){
     stop2start();
     document.getElementById("startButton").disabled = false;
     document.getElementById("resetButton").disabled = true;
-
+    $(".category").html("");
+    $(".question").html("");
 
 
 
