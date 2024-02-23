@@ -23,7 +23,7 @@
 
 #gameInfo {
     display: grid;
-    grid-template-columns: 18% 22% 35% 25%;
+    grid-template-columns: 30% 40% 30%;
     justify-content: space-evenly;
 }
 
@@ -32,7 +32,7 @@
 }
 
 #feedback {
-    text-align: left;
+    text-align: center;
 }
 
 #time {
