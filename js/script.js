@@ -35,8 +35,12 @@ function startGame(){
 }
 
 function populateBoard(){
-    let cat=document.getElementsByClassName("category").innerHTML = "Test";
-    document.getElementsByClassName("category").innerHTML = "Test";
+    // let cat=document.getElementsByClassName("category").innerHTML = "Test";
+    // document.getElementsByClassName("category").innerHTML = "Test";
+
+    $(".category").html("category");
+    $(".question").html("question");
+
 }
 
 

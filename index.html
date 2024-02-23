@@ -1,116 +1,112 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Welcome to Fake Jeopardy</title>
+<head>
+    <meta charset="utf-8">
+    <title>Welcome to Fake Jeopardy</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <link href="css/style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
-    </head>
-    <body>
+</head>
+<body>
 
-        <div id="container">
-            <header>
-                <h1>Welcome to Fake Jeopardy</h1>
-            </header>
-
-
-            <div id="gameBoard">
-                <div class="category"></div>
-                <div class="category"></div>
-                <div class="category"></div>
-                <div class="category"></div>
-                <div class="category"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-                <div class="question"></div>
-            </div>
-
-            
-            <div id="gameInfo">
-                <div id="controls">
-                    <button class='btn' id="startButton">Start</button>
-                    <button class="'btn' "disabled id="resetButton">Reset</button>
-                </div>
-
-                <!-- Stopwatch -->
-                <div id="time">
-                    <span class="digit" id="hr">00</span>
-                    <span class="txt">:</span>
-                    <span class="digit" id="min">00</span>
-                    <span class="txt">:</span>
-                    <span class="digit" id="sec">00</span>
-                    <span class="txt">:</span>
-                    <span class="digit" id="count">00</span>
-                </div>
+<div id="container">
+    <header>
+        <h1>Welcome to Fake Jeopardy</h1>
+    </header>
 
 
-                <div id="feedback">Click Start to begin.</div>
-
-                <div id="score">
-                    Score: <span id="total">0</span>
-                </div>
-
-            </div>
-            
-
-
-
-        </div><!--container-->
-
-        <!-- The Modal -->
-        <div id="qaModal" class="modal">
-
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <div id="questionArea">
-                   <p> Pretend question</p>
-                </div>
-            
-                <div id="answerArea">
-                    <form>
-                        <div><input type="radio" name="qa" value="correct"> Answer 1 </div>
-                        <div><input type="radio" name="qa" value="incorrect"> Answer 2</div>
-                        <div><input type="radio" name="qa" value="incorrect"> Answer 3</div>
-        
-                    </form>
-        
-                    <button id="submitResponse">Submit Answer</button>
-                </div>
-
-            </div><!-- .modal-content -->
-        
-        </div><!-- .modal-->
+    <div id="gameBoard">
+        <div class="category"></div>
+        <div class="category"></div>
+        <div class="category"></div>
+        <div class="category"></div>
+        <div class="category"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+        <div class="question"></div>
+    </div>
 
 
+    <div id="gameInfo">
+        <div id="controls">
+            <button class='btn' id="startButton">Start</button>
+            <button class="'btn' " disabled id="resetButton">Reset</button>
+        </div>
 
-        <script type="text/javascript" src="js/script.js"></script>
-    </body>
+        <!-- Stopwatch -->
+        <div id="time">
+            <span class="digit" id="hr">00</span>
+            <span class="txt">:</span>
+            <span class="digit" id="min">00</span>
+            <span class="txt">:</span>
+            <span class="digit" id="sec">00</span>
+            <span class="txt">:</span>
+            <span class="digit" id="count">00</span>
+        </div>
 
 
+        <div id="feedback">Click Start to begin.</div>
+
+        <div id="score">
+            Score: <span id="total">0</span>
+        </div>
+
+    </div>
+
+
+</div><!--container-->
+
+<!-- The Modal -->
+<div class="modal" id="qaModal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="questionArea">
+            <p> Pretend question</p>
+        </div>
+
+        <div id="answerArea">
+            <form>
+                <div><input name="qa" type="radio" value="correct"> Answer 1</div>
+                <div><input name="qa" type="radio" value="incorrect"> Answer 2</div>
+                <div><input name="qa" type="radio" value="incorrect"> Answer 3</div>
+
+            </form>
+
+            <button id="submitResponse">Submit Answer</button>
+        </div>
+
+    </div><!-- .modal-content -->
+
+</div><!-- .modal-->
+
+
+<script src="js/script.js" type="text/javascript"></script>
+</body>
 
 
 </html>

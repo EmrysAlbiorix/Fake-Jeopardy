@@ -52,21 +52,27 @@ header {
     background-color: blue;
     color: #FFD700;
     font-size: 20px;
+    aspect-ratio: 2/1;
+    height: auto;
 }
 
 .category {
+    aspect-ratio: 2/1;
+    height: auto;
     vertical-align: center;
     horiz-align: center;
     background-color: blue;
     color: #FFD700;
     font-size: 20px;
     text-transform: uppercase;
+    display: flex;
+    align-content: center;
+    justify-content: center;
 }
 
 #gameBoard {
     display: grid;
     grid-template-columns: 20% 20% 20% 20% 20%;
-    grid-template-rows: 75px 75px 75px 75px 75px;
     border-color: black;
     border-style: solid;
     border-width: 3px;
