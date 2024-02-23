@@ -39,9 +39,9 @@ function populateBoard(){
     // document.getElementsByClassName("category").innerHTML = "Test";
 
     $(".category").html("category");
-$(".question").each(function(index) {
-    $(this).html( (Math.floor(index/5)+1)*10);
-});
+    $(".question").each(function(index) {
+        $(this).html( (Math.floor(index/5)+1)*10);
+    });
 
 }
 
