@@ -40,7 +40,7 @@
 }
 
 header {
-    font-family: gyparody;
+    font-family: gyparody, serif;
     text-align: center;
     color: black;
 }
@@ -52,6 +52,7 @@ header {
     background-color: blue;
     color: #FFD700;
     font-size: 20px;
+    font-family: korinna, serif;
     aspect-ratio: 2/1;
     height: auto;
     display: flex;

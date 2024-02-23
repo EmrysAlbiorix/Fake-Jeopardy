@@ -39,7 +39,9 @@ function populateBoard(){
     // document.getElementsByClassName("category").innerHTML = "Test";
 
     $(".category").html("category");
-    $(".question").html("question");
+$(".question").each(function(index) {
+    $(this).html( (Math.floor(index/5)+1)*10);
+});
 
 }
 
@@ -49,7 +51,7 @@ function populateBoard(){
 
 
 function viewQuestion(){
-    
+
     console.log(this.id)
     // If id is set earlier, saving it to local storage
     window.localStorage.setItem("currentIndex", this.id);
@@ -79,7 +81,7 @@ function viewQuestion(){
 
 
 function checkResponse(){
-    
+
 
 
 
