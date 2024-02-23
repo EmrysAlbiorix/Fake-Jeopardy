@@ -54,6 +54,9 @@ header {
     font-size: 20px;
     aspect-ratio: 2/1;
     height: auto;
+    display: flex;
+    align-content: center;
+    justify-content: center;
 }
 
 .category {
