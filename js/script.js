@@ -5,26 +5,18 @@ const categories=["Sports", "Animals", "Science & Nature", "History", "Art"]
 document.getElementById("startButton").addEventListener("click", startGame);
 document.getElementById("resetButton").addEventListener("click", resetGame);
 
-function start2stop() {
-    //document.getElementById("startButton").innerHTML = "Stop";
-    document.getElementById("feedback").innerHTML = "Choose a Category";
-    //document.getElementById("startButton").id = "stopButton";
-}
-
-function stop2start() {
-    //document.getElementById("startButton").innerHTML = "Start";
-    document.getElementById("feedback").innerHTML = "Click Start to begin.";
-    //document.getElementById("stopButton").id = "startButton";
-}
-
 /* complete functions below */
 
 function startGame(){
     // Starts the timer
     startTimer();
 
+    // Button and feedback stuff
+    document.getElementById("feedback").innerHTML = "Select a Question";
     document.getElementById("startButton").disabled = true;
     document.getElementById("resetButton").disabled = false;
+
+    // Tile stuff
     populateBoard();
 
     // Sets score to 0
@@ -43,6 +35,11 @@ function populateBoard(){
         $(this).html( (Math.floor(index/5)+1)*10);
     });
 
+    // Clickable questions
+    for (let i = 0; i <= 24; i++) {
+        document.getElementsByClassName("question")[i].addEventListener("click", viewQuestion);
+        document.getElementsByClassName("question")[i].setAttribute('id', i);
+    }
 }
 
 
@@ -93,7 +90,7 @@ function checkResponse(){
 function resetGame(){
     resetTimer();
     stopTimer();
-    stop2start();
+    document.getElementById("feedback").innerHTML = "Click Start to begin.";
     document.getElementById("startButton").disabled = false;
     document.getElementById("resetButton").disabled = true;
     $(".category").html("");
@@ -114,7 +111,6 @@ let count = 0;
 let timer;
 
 function startTimer() {
-    start2stop();
     timer = setInterval(updateTimer, 10);
     //document.getElementById("stopButton").addEventListener("click", stopTimer);
 }
@@ -131,15 +127,15 @@ function resetTimer() {
 
 function updateTimer() {
     count++;
-    if (count == 100) {
+    if (count === 100) {
         count = 0;
         sec++;
     }
-    if (sec == 60) {
+    if (sec === 60) {
         sec = 0;
         min++;
     }
-    if (min == 60) {
+    if (min === 60) {
         min = 0;
         hr++;
     }
