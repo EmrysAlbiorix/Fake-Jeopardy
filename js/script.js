@@ -3,6 +3,7 @@ const categories = ["Sports", "Animals", "Science & Nature", "History", "Art"]
 /* add event listeners for start & reset buttons here */
 document.getElementById("startButton").addEventListener("click", startGame);
 document.getElementById("resetButton").addEventListener("click", resetGame);
+document.getElementById("submitResponse").addEventListener("click", checkResponse);
 
 /* complete functions below */
 
@@ -54,9 +55,7 @@ async function populateBoard() {
 
     // Set the HTML content of the corresponding element
     $(".category").each(function (index) {
-        console.log(index)
         const val = JSON.parse(window.localStorage.getItem(`category${index}`))[0]
-        console.log(val)
         $(this).html(val.name);
     });
     $(".question").each(function (index) {
@@ -71,10 +70,10 @@ async function populateBoard() {
 }
 
 
-const getApiUrl = ({category, difficulty}) => {
-
-    category = JSON.parse(window.localStorage.getItem(`category${category}`)).id;
+const getApiUrl = (categoryIndex, difficulty) => {
+    const category = JSON.parse(window.localStorage.getItem( `category${categoryIndex}`))[0].id
     let apiDifficulty = "";
+
     switch (difficulty) {
         case 0:
         case 1:
@@ -100,8 +99,6 @@ async function handleRequest(url) {
 }
 
 async function viewQuestion() {
-
-    console.log(this.id)
     // If id is set earlier, saving it to local storage
     window.localStorage.setItem("currentIndex", this.id);
 
@@ -126,21 +123,40 @@ async function viewQuestion() {
     const category = Math.floor(this.id % 5);
     const difficulty = Math.floor(this.id / 5);
 
-    const apiUrl = getApiUrl({category, difficulty});
+    const apiUrl = getApiUrl(category, difficulty);
     const question = await handleRequest(apiUrl)
 
-    console.log("Response Question: ", question);
-
-    console.log("Question: ", question.question);
     $("#questionArea p").html(question.question);
 
+    const answers = [...question.incorrect_answers, question.correct_answer];
+
+    $("#answerArea label").each(function (index) {
+        $(this).html(answers[index]);
+    })
+
+    //store quesiton in local storage
+    window.localStorage.setItem("question", JSON.stringify(question));
 
 }
 
 
 function checkResponse() {
+    // checkResponse()
+    // Determines whether the checked answer is correct, based on radio button attribute value
+    // If the answer is correct, “Correct!” is displayed in <div id=”feedback”></div>
+    // If answer is incorrect, displays the correct answer in the feedback div
+    // Either adds (if correct) or subtracts (if incorrect) the question points to/from the overall total, and displays in <span id=”total”></span>
+    // Removes text (point value) from the specific div of class question, so it appears blank.
+    // Remove the event listened from that specific div of class question.
 
+    const question = JSON.parse(window.localStorage.getItem("question"));
+    const correctAnswer = question.correct_answer;
+    const userAnswer = $("input[name='qa']:checked").val();
 
+    if (userAnswer === correctAnswer) {
+        window.alert("Correct!");
+    }
+    console.log("Answers", userAnswer, correctAnswer);
     /* for closing modal */
     //modal.style.display = "none";
 }
