@@ -25,14 +25,40 @@ function startGame() {
     document.getElementById("submitResponse").addEventListener("click", checkResponse);
 }
 
-function populateBoard() {
+const getRandom = (categorieS) => {
+    let categories = categorieS;
+    for (let i = 0; i < 5; i++) {
+        const ind = Math.floor(Math.random() * categories.length);
+        //remove value from array
+        const val = categories.splice(ind, 1);
+        window.localStorage.setItem(`category${i}`, JSON.stringify(val));
+    }
+}
+
+
+async function populateBoard() {
     // let cat=document.getElementsByClassName("category").innerHTML = "Test";
     // document.getElementsByClassName("category").innerHTML = "Test";
 
     //use the below link to randomize categories:
+    let res;
+    const response = await fetch("https://opentdb.com/api_category.php");
+    await response.json().then(data => {
+        res = data.trivia_categories;
+        getRandom(res);
+
+    });
+
+
     // https://opentdb.com/api_category.php
 
-    $(".category").html("category");
+    // Set the HTML content of the corresponding element
+    $(".category").each(function (index) {
+        console.log(index)
+        const val = JSON.parse(window.localStorage.getItem(`category${index}`))[0]
+        console.log(val)
+        $(this).html(val.name);
+    });
     $(".question").each(function (index) {
         $(this).html((Math.floor(index / 5) + 1) * 10);
     });
@@ -46,7 +72,8 @@ function populateBoard() {
 
 
 const getApiUrl = ({category, difficulty}) => {
-    category += 9;
+
+    category = JSON.parse(window.localStorage.getItem(`category${category}`)).id;
     let apiDifficulty = "";
     switch (difficulty) {
         case 0:
@@ -105,7 +132,7 @@ async function viewQuestion() {
     console.log("Response Question: ", question);
 
     console.log("Question: ", question.question);
-    $("#questionArea p").text(question.question);
+    $("#questionArea p").html(question.question);
 
 
 }

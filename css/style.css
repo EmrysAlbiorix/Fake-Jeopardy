@@ -69,6 +69,7 @@ header {
     color: #FFD700;
     font-size: 20px;
     text-transform: uppercase;
+    text-align: center;
     display: flex;
     align-content: center;
     justify-content: center;
