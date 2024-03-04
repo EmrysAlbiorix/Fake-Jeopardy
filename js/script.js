@@ -4,15 +4,17 @@ const categories = ["Sports", "Animals", "Science & Nature", "History", "Art"]
 document.getElementById("startButton").addEventListener("click", startGame);
 document.getElementById("resetButton").addEventListener("click", resetGame);
 document.getElementById("submitResponse").addEventListener("click", checkResponse);
+document.getElementById("feedback").innerHTML = "Select a Question";
+
 
 /* complete functions below */
 
 function startGame() {
     // Starts the timer
     startTimer();
+    window.localStorage.setItem("gameState", JSON.stringify({score: 0}));
 
     // Button and feedback stuff
-    document.getElementById("feedback").innerHTML = "Select a Question";
     document.getElementById("startButton").disabled = true;
     document.getElementById("resetButton").disabled = false;
 
@@ -20,7 +22,7 @@ function startGame() {
     populateBoard();
 
     // Sets score to 0
-    document.getElementById("total").innerHTML = "0";
+    updateScore(0)
 
     // Waits for user response
     document.getElementById("submitResponse").addEventListener("click", checkResponse);
@@ -71,7 +73,7 @@ async function populateBoard() {
 
 
 const getApiUrl = (categoryIndex, difficulty) => {
-    const category = JSON.parse(window.localStorage.getItem( `category${categoryIndex}`))[0].id
+    const category = JSON.parse(window.localStorage.getItem(`category${categoryIndex}`))[0].id
     let apiDifficulty = "";
 
     switch (difficulty) {
@@ -99,6 +101,7 @@ async function handleRequest(url) {
 }
 
 async function viewQuestion() {
+
     // If id is set earlier, saving it to local storage
     window.localStorage.setItem("currentIndex", this.id);
 
@@ -128,17 +131,27 @@ async function viewQuestion() {
 
     $("#questionArea p").html(question.question);
 
-    const answers = [...question.incorrect_answers, question.correct_answer];
+    const answers = [...question.incorrect_answers, question.correct_answer]
+        .sort(() => (Math.random() > .5) ? 1 : -1);
+    const indexCorrect = answers.indexOf(question.correct_answer);
 
     $("#answerArea label").each(function (index) {
         $(this).html(answers[index]);
     })
 
+    const updatedQuestion = {...question, indexCorrect, difficulty}
+
     //store quesiton in local storage
-    window.localStorage.setItem("question", JSON.stringify(question));
+    window.localStorage.setItem("question", JSON.stringify(updatedQuestion));
 
 }
 
+const updateScore = (score) => {
+    const gameState = JSON.parse(window.localStorage.getItem("gameState"));
+    gameState.score += score;
+    $('#total').html(gameState.score);
+    window.localStorage.setItem("gameState", JSON.stringify(gameState));
+}
 
 function checkResponse() {
     // checkResponse()
@@ -151,14 +164,19 @@ function checkResponse() {
 
     const question = JSON.parse(window.localStorage.getItem("question"));
     const correctAnswer = question.correct_answer;
-    const userAnswer = $("input[name='qa']:checked").val();
+    let userAnswer = $("input[name='qa']:checked");
+    userAnswer.length === 0 ? userAnswer = "No Answer" : userAnswer = userAnswer[0].nextElementSibling.innerHTML;
 
-    if (userAnswer === correctAnswer) {
-        window.alert("Correct!");
-    }
-    console.log("Answers", userAnswer, correctAnswer);
+    if (userAnswer === "No Answer") return
+
+    tempAlert(userAnswer === correctAnswer ? "Correct!" : `Incorrect! The correct answer is: ${correctAnswer}`, 3000, userAnswer === correctAnswer ? "#ccffccAA" : "#ffaaaaAA");
+    updateScore((question.difficulty + 1) * 10 * (userAnswer === correctAnswer ? 1 : -1));
+
     /* for closing modal */
-    //modal.style.display = "none";
+    modal.style.display = "none";
+    let questionCell = document.getElementById(window.localStorage.getItem("currentIndex"));
+    questionCell.removeEventListener("click", viewQuestion);
+    questionCell.innerHTML = "";
 }
 
 function resetGame() {
@@ -170,8 +188,23 @@ function resetGame() {
     $(".category").html("");
     $(".question").html("");
 
+    window.localStorage.setItem("gameState", JSON.stringify({score: 0}));
+    updateScore(0);
 
 }
+
+function tempAlert(msg, duration, background) {
+    var $el = $('<div class="tempAlert"></div>');
+    $el.html(`<p>${msg}</p>`)
+    $el.css('background-color', background);
+    $('body').append($el);
+    setTimeout(function () {
+        $el.fadeOut('slow', function () {
+            $(this).remove();
+        });
+    }, duration);
+}
+
 
 /*---------------------------------------------------------------------------------------------------------*/
 
