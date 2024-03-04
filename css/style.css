@@ -52,11 +52,11 @@ header {
 
 
 .question {
-    font-size: 2vw;
+    font-size: 20px;
 }
 
 .category {
-    font-size: 1.5vw;
+    font-size: 20px;
 }
 
 #gameBoard > div {
