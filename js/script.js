@@ -1,79 +1,70 @@
-const categories = ["Sports", "Animals", "Science & Nature", "History", "Art"]
+// Array of categories
+const categories = ["Sports", "Animals", "Science & Nature", "History", "Art"];
 
-/* add event listeners for start & reset buttons here */
+// Event listeners for buttons
 document.getElementById("startButton").addEventListener("click", startGame);
 document.getElementById("resetButton").addEventListener("click", resetGame);
 document.getElementById("submitResponse").addEventListener("click", checkResponse);
+document.getElementById("feedback").innerHTML = "Select a Question";
 
-/* complete functions below */
-
+// Function to start the game
 function startGame() {
-    // Starts the timer
-    startTimer();
+    startTimer(); // Start the timer
+    window.localStorage.setItem("gameState", JSON.stringify({score: 0}));
 
-    // Button and feedback stuff
-    document.getElementById("feedback").innerHTML = "Select a Question";
+    // Disable start button, enable reset button
     document.getElementById("startButton").disabled = true;
     document.getElementById("resetButton").disabled = false;
 
-    // Tile stuff
+    // Populate board, set score to 0, and wait for user response
     populateBoard();
-
-    // Sets score to 0
-    document.getElementById("total").innerHTML = "0";
-
-    // Waits for user response
+    updateScore(0);
     document.getElementById("submitResponse").addEventListener("click", checkResponse);
 }
 
-const getRandom = (categorieS) => {
-    let categories = categorieS;
+// Function to randomly select categories
+const getRandomCategories = (categories) => {
+    let tempCategories = categories.slice(); // Create a copy of categories array
     for (let i = 0; i < 5; i++) {
-        const ind = Math.floor(Math.random() * categories.length);
-        //remove value from array
-        const val = categories.splice(ind, 1);
-        window.localStorage.setItem(`category${i}`, JSON.stringify(val));
+        const ind = Math.floor(Math.random() * tempCategories.length);
+        const val = tempCategories.splice(ind, 1)[0]; // Remove value from array
+        window.localStorage.setItem(`category${i}`, JSON.stringify([val])); // Store category in local storage
     }
 }
 
-
+// Function to populate the game board with categories and questions
 async function populateBoard() {
-    // let cat=document.getElementsByClassName("category").innerHTML = "Test";
-    // document.getElementsByClassName("category").innerHTML = "Test";
-
-    //use the below link to randomize categories:
     let res;
-    const response = await fetch("https://opentdb.com/api_category.php");
+    const response = await fetch("https://opentdb.com/api_category.php"); // Fetch categories from API
     await response.json().then(data => {
         res = data.trivia_categories;
-        getRandom(res);
-
+        getRandomCategories(res); // Get random categories
     });
 
-
-    // https://opentdb.com/api_category.php
-
-    // Set the HTML content of the corresponding element
+    // Set category and question values
     $(".category").each(function (index) {
-        const val = JSON.parse(window.localStorage.getItem(`category${index}`))[0]
+        // Get category value from local storage and set it to the corresponding element
+        const val = JSON.parse(window.localStorage.getItem(`category${index}`))[0];
         $(this).html(val.name);
     });
     $(".question").each(function (index) {
+        // Set question values based on index
         $(this).html((Math.floor(index / 5) + 1) * 10);
     });
 
-    // Clickable questions
+    // Make questions clickable
     for (let i = 0; i <= 24; i++) {
+        // Add click event listener to each question cell
         document.getElementsByClassName("question")[i].addEventListener("click", viewQuestion);
-        document.getElementsByClassName("question")[i].setAttribute('id', i);
+        document.getElementsByClassName("question")[i].setAttribute('id', i); // Set unique ID for each question
     }
 }
 
 
+// Function to get API URL based on category and difficulty
 const getApiUrl = (categoryIndex, difficulty) => {
-    const category = JSON.parse(window.localStorage.getItem( `category${categoryIndex}`))[0].id
+    const category = JSON.parse(window.localStorage.getItem(`category${categoryIndex}`))[0].id;
     let apiDifficulty = "";
-
     switch (difficulty) {
         case 0:
         case 1:
@@ -92,75 +83,92 @@ const getApiUrl = (categoryIndex, difficulty) => {
     return `https://opentdb.com/api.php?amount=1&category=${category}&difficulty=${apiDifficulty}&type=multiple`;
 }
 
+// Function to handle API request
 async function handleRequest(url) {
-    const response = await fetch(url);
-    const res = await response.json();
-    return res.results[0]
+    const response = await fetch(url); // Send request to API
+    const res = await response.json(); // Get JSON response
+    return res.results[0]; // Return the first result
 }
 
+// Function to display question
 async function viewQuestion() {
-    // If id is set earlier, saving it to local storage
-    window.localStorage.setItem("currentIndex", this.id);
+    window.localStorage.setItem("currentIndex", this.id); // Save question index
 
+    // Introduce a 0.5-second delay before displaying the modal
+    setTimeout(() => {
+        // Display modal
+        modal = document.getElementById("qaModal");
+        modal.style.display = "block";
+    }, 500); // Half a second delay
 
-    // Get the modal
-    // Not using var makes it global
-    modal = document.getElementById("qaModal");
-
-    // Get the <span> element that closes the modal
+    // Close modal function
     var closeX = document.getElementsByClassName("close")[0];
-
-    // Display modal
-    modal.style.display = "block";
-
-
-    // When the user clicks on <span> (x), close the modal
     closeX.onclick = function () {
         modal.style.display = "none";
     }
 
-    // get data from api based on category and value
+    // Get question data from API
     const category = Math.floor(this.id % 5);
     const difficulty = Math.floor(this.id / 5);
-
     const apiUrl = getApiUrl(category, difficulty);
-    const question = await handleRequest(apiUrl)
+    const question = await handleRequest(apiUrl); // Fetch question from API
 
+    // Display question and answers
     $("#questionArea p").html(question.question);
-
-    const answers = [...question.incorrect_answers, question.correct_answer];
-
+    const answers = [...question.incorrect_answers, question.correct_answer].sort(() => (Math.random() > .5) ? 1 : -1);
+    const indexCorrect = answers.indexOf(question.correct_answer);
     $("#answerArea label").each(function (index) {
         $(this).html(answers[index]);
-    })
+    });
 
-    //store quesiton in local storage
-    window.localStorage.setItem("question", JSON.stringify(question));
-
+    // Store question in local storage
+    const updatedQuestion = {...question, indexCorrect, difficulty};
+    window.localStorage.setItem("question", JSON.stringify(updatedQuestion));
 }
 
 
-function checkResponse() {
-    // checkResponse()
-    // Determines whether the checked answer is correct, based on radio button attribute value
-    // If the answer is correct, “Correct!” is displayed in <div id=”feedback”></div>
-    // If answer is incorrect, displays the correct answer in the feedback div
-    // Either adds (if correct) or subtracts (if incorrect) the question points to/from the overall total, and displays in <span id=”total”></span>
-    // Removes text (point value) from the specific div of class question, so it appears blank.
-    // Remove the event listened from that specific div of class question.
+// Function to update score
+const updateScore = (score) => {
+    const gameState = JSON.parse(window.localStorage.getItem("gameState"));
+    gameState.score += score;
+    $('#total').html(gameState.score);
+    window.localStorage.setItem("gameState", JSON.stringify(gameState));
+}
 
+// Function to check user response
+function checkResponse() {
+    // Retrieve the question from local storage
     const question = JSON.parse(window.localStorage.getItem("question"));
     const correctAnswer = question.correct_answer;
-    const userAnswer = $("input[name='qa']:checked").val();
 
-    if (userAnswer === correctAnswer) {
-        window.alert("Correct!");
-    }
-    console.log("Answers", userAnswer, correctAnswer);
-    /* for closing modal */
-    //modal.style.display = "none";
+    // Get the user's answer
+    let userAnswer = $("input[name='qa']:checked");
+    userAnswer.length === 0 ? userAnswer = "No Answer" : userAnswer = userAnswer[0].nextElementSibling.innerHTML; // Set user answer, default to "No Answer" if none selected
+
+    // Display feedback to the user
+    const feedbackElement = document.getElementById("feedback");
+    // Show "Correct!" if user's answer matches the correct answer, else display "Incorrect!" with the correct answer
+    feedbackElement.innerHTML = userAnswer === correctAnswer ? "Correct!" : `Incorrect! The correct answer is: ${correctAnswer}`;
+    feedbackElement.style.backgroundColor = userAnswer === correctAnswer ? "#ccffccAA" : "#ffaaaaAA"; // Set background color based on correctness
+
+    // Update score based on question difficulty and correctness
+    updateScore((question.difficulty + 1) * 10 * (userAnswer === correctAnswer ? 1 : -1)); // Update score
+
+    // Reset feedback after 3 seconds
+    setTimeout(() => {
+        feedbackElement.innerHTML = "Select a Question"; // Reset feedback message
+        feedbackElement.style.backgroundColor = ""; // Reset background color
+    }, 3000);
+
+    // Close modal and mark the question as answered
+    modal.style.display = "none"; // Hide modal
+    let questionCell = document.getElementById(window.localStorage.getItem("currentIndex"));
+    questionCell.removeEventListener("click", viewQuestion); // Remove click event listener
+    questionCell.innerHTML = ""; // Clear the question cell
 }
 
+
+// Function to reset the game
 function resetGame() {
     resetTimer();
     stopTimer();
@@ -169,14 +177,13 @@ function resetGame() {
     document.getElementById("resetButton").disabled = true;
     $(".category").html("");
     $(".question").html("");
-
-
+    window.localStorage.setItem("gameState", JSON.stringify({score: 0}));
+    updateScore(0);
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
 
-/* JS for the stopwatch */
-
+// Stopwatch functionality
 let hr = 0;
 let min = 0;
 let sec = 0;
@@ -185,7 +192,6 @@ let timer;
 
 function startTimer() {
     timer = setInterval(updateTimer, 10);
-    //document.getElementById("stopButton").addEventListener("click", stopTimer);
 }
 
 function stopTimer() {
